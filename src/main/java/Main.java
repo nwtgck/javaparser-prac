@@ -2,6 +2,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.FileInputStream;
@@ -16,10 +17,56 @@ public class Main {
         CompilationUnit cu = JavaParser.parse(fileInputStream);
 
 
-        // Find class names and method names
-        new ClassAndMethodNameVisitor().visit(cu, null);
+        if(false) {
+            // Find class names and method names
+            new ClassAndMethodNameVisitor().visit(cu, null);
+        }
+
+        if(true){
+            new MethodCallVisitor().visit(cu,  0);
+        }
     }
 }
+
+class StringUtil {
+   static String stringTimes(String s, int times) {
+        String out = "";
+        for (int i = 0; i < times; i++) {
+            out += s;
+        }
+        return out;
+    }
+
+    static String nTabs(int times){
+       return stringTimes("\t", times);
+    }
+}
+
+
+
+/**
+ * Finder for method call
+ */
+class MethodCallVisitor extends VoidVisitorAdapter<Integer> {
+    @Override
+    public void visit(final ClassOrInterfaceDeclaration n, final Integer depth) {
+        System.out.printf("%sVISIT ClassOrInterfaceDeclaration: %s, %s\n", StringUtil.nTabs(depth),  n.getName(), depth);
+        super.visit(n, depth+1);
+    }
+
+    @Override
+    public void visit(MethodDeclaration methodDeclaration, Integer depth) {
+        System.out.printf("%sVISIT MethodDeclaration: %s, %s\n", StringUtil.nTabs(depth), methodDeclaration.getName(), depth);
+        super.visit(methodDeclaration, depth+1);
+    }
+
+    @Override
+    public void visit(final MethodCallExpr n, final Integer depth) {
+        System.out.printf("%sVISIT MethodCallExpr: %s, %s\n", StringUtil.nTabs(depth), n, depth);
+        super.visit(n, depth+1);
+    }
+}
+
 
 /**
  * Finder for class names and method names
