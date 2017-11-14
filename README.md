@@ -3,6 +3,10 @@
 ## How to run
 
 ```bash
-cd <this repo>
+git clone --recursive https://github.com/nwtgck/javaparser-prac.git
+cd javaparser-prac/
 sbt run
 ```
+
+
+**NOTE: `--recursive` is necessary**
